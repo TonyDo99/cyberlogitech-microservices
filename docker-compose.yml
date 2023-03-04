@@ -1,0 +1,132 @@
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    container_name: zookeeper-service
+    ports:
+      - '2181:2181'
+    networks:
+      - app-tier
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: kafka-service
+    environment:
+      - KAFKA_BROKER_ID=1
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-service:2181
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-service:9092,PLAINTEXT_HOST://localhost:29092
+    # volumes:
+    #   - kafka-persistence:/bitnami/kafka
+    depends_on:
+      - zookeeper
+    networks:
+      - app-tier
+    ports:
+      - '9092:9092'
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - '8080:8080'
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-service:9092
+    networks:
+      - app-tier
+
+  postgresql-master:
+    image: docker.io/bitnami/postgresql:14
+    container_name: db-clickup-container
+    # volumes:
+    #   - postgresql-persistence:/bitnami/postgresql
+    environment:
+      - POSTGRESQL_USERNAME=administation
+      - POSTGRESQL_PASSWORD=cyberlogistics
+      - POSTGRESQL_DATABASE=db_clickup
+    ports:
+      - '5432:5432'
+    restart: always
+    networks:
+      - app-tier
+
+  api-gateway:
+    container_name: api-gateway-container
+    build:
+      context: .
+      dockerfile: ./apps/api-gateway/Dockerfile
+      target: development
+    command: yarn start:dev api-gateway
+    depends_on:
+      postgresql-master:
+        condition: service_completed_successfully
+      kafka:
+        condition: service_completed_successfully
+      zookeeper:
+        condition: service_completed_successfully
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - app-tier
+    restart: always
+    ports:
+      - '3000:3000'
+
+  workspace:
+    build:
+      context: .
+      dockerfile: ./apps/workspaces/Dockerfile
+      target: development
+    container_name: workspaces-service
+    command: yarn start:dev workspaces
+    depends_on:
+      postgresql-master:
+        condition: service_completed_successfully
+      kafka:
+        condition: service_completed_successfully
+      api-gateway:
+        condition: service_completed_successfully
+      zookeeper:
+        condition: service_completed_successfully
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    networks:
+      - app-tier
+
+  space:
+    build:
+      context: .
+      dockerfile: ./apps/spaces/Dockerfile
+      target: development
+    container_name: space-service
+    command: yarn start:dev spaces
+    depends_on:
+      postgresql-master:
+        condition: service_completed_successfully
+      kafka:
+        condition: service_completed_successfully
+      api-gateway:
+        condition: service_completed_successfully
+      zookeeper:
+        condition: service_completed_successfully
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    networks:
+      - app-tier
