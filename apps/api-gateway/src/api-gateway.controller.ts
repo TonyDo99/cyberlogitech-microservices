@@ -4,8 +4,10 @@ import {
   Controller,
   Get,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { AuthenticationDto } from './dto/create-user.dto';
 
 @Controller()

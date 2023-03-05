@@ -13,4 +13,4 @@ import { UserUseCase } from './create-user.usecase';
   ],
   exports: [IAuthenticationUseCase],
 })
-export class UserUsecaseModule {}
+export class UserUseCaseModule {}

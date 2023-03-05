@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { UserEntity } from 'libs/common/entities/user.entity';
 import { hashingFunc } from 'libs/common/utils/hashing';
 import { InsertResult } from 'typeorm';
 import { AuthenticationDto } from './dto/create-user.dto';
@@ -24,9 +23,11 @@ export class ApiGatewayService {
     });
   }
 
-  async login(
-    authenticationDto: AuthenticationDto,
-  ): Promise<Omit<UserEntity, 'password'>> {
+  async login(authenticationDto: AuthenticationDto): Promise<{
+    accessToken: string;
+    tokenType: string;
+    expiresIn: string;
+  }> {
     this.logger.log('Login service is running !');
 
     return await this.userUseCase.login(authenticationDto);

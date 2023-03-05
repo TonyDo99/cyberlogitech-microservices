@@ -8,7 +8,7 @@ import { DB_VALIDATION } from 'libs/common/joi/database.joi';
 import { join } from 'path';
 import { ApiGatewayController } from './api-gateway.controller';
 import { ApiGatewayService } from './api-gateway.service';
-import { UserUsecaseModule } from './usecase';
+import { UserUseCaseModule } from './usecase';
 
 // TODO Change to using Auth0 for authentication user.
 @Module({
@@ -60,7 +60,7 @@ import { UserUsecaseModule } from './usecase';
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([UserEntity]),
-    UserUsecaseModule,
+    UserUseCaseModule,
   ],
   controllers: [ApiGatewayController],
   providers: [ApiGatewayService],
