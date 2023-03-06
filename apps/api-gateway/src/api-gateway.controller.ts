@@ -4,10 +4,10 @@ import {
   Controller,
   Get,
   Post,
-  UseGuards,
 } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
+import { catchError } from 'rxjs';
 import { ApiGatewayService } from './api-gateway.service';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { AuthenticationDto } from './dto/create-user.dto';
 
 @Controller()
@@ -17,18 +17,22 @@ export class ApiGatewayController {
   @Post('user')
   async register(@Body() createUserDto: AuthenticationDto) {
     try {
-      return await this.apiGatewayService.createUser(createUserDto);
+      return (await this.apiGatewayService.createUser(createUserDto)).pipe(
+        catchError((error) => {
+          throw new RpcException(error);
+        }),
+      );
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error);
     }
   }
 
   @Get('user')
-  async login(@Body() authenticationDto: AuthenticationDto) {
-    try {
-      return await this.apiGatewayService.login(authenticationDto);
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
+  login(@Body() authenticationDto: AuthenticationDto) {
+    return this.apiGatewayService.login(authenticationDto).pipe(
+      catchError((error) => {
+        throw new RpcException(error);
+      }),
+    );
   }
 }

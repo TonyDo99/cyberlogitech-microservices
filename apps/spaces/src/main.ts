@@ -12,6 +12,7 @@ async function bootstrap() {
           clientId: 'space',
           brokers: ['kafka-service:9092'],
         },
+        producerOnlyMode: true,
         consumer: {
           groupId: 'space-consumer',
         },

@@ -85,6 +85,29 @@ services:
     ports:
       - '3000:3000'
 
+  user:
+    build:
+      context: .
+      dockerfile: ./apps/user/Dockerfile
+      target: development
+    container_name: user-service
+    command: yarn start:dev user
+    depends_on:
+      postgresql-master:
+        condition: service_completed_successfully
+      kafka:
+        condition: service_completed_successfully
+      api-gateway:
+        condition: service_completed_successfully
+      zookeeper:
+        condition: service_completed_successfully
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    networks:
+      - app-tier
+
   workspace:
     build:
       context: .

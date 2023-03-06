@@ -13,7 +13,7 @@ import { AuthenticationDto } from '../dto/create-user.dto';
 export const IUserRepository = Symbol('IUserRepository');
 
 export interface IUserRepository {
-  register(createUserDto: AuthenticationDto): Promise<InsertResult>;
+  register(createUserDto: AuthenticationDto): Promise<string>;
 
   login(loginUserDto: AuthenticationDto): Promise<{
     accessToken: string;
@@ -29,7 +29,8 @@ export class UserRepository implements IUserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    private jwtSecret: JwtService,
+
+    private readonly jwtSecret: JwtService,
   ) {}
 
   async findUserByEmail(email: string): Promise<UserEntity> {
@@ -44,8 +45,8 @@ export class UserRepository implements IUserRepository {
     else return exists;
   }
 
-  async register(authenticationDto: AuthenticationDto): Promise<InsertResult> {
-    return await this.userRepository.insert(authenticationDto);
+  async register(authenticationDto: AuthenticationDto): Promise<string> {
+    return JSON.stringify(await this.userRepository.insert(authenticationDto));
   }
 
   async login(loginUserDto: AuthenticationDto): Promise<{
@@ -55,13 +56,12 @@ export class UserRepository implements IUserRepository {
   }> {
     const user = await this.findUserByEmail(loginUserDto.email);
 
-    if (user && compareSync(loginUserDto.password, user.password)) {
+    if (user && compareSync(loginUserDto.password, user.password))
       return {
         accessToken: this.jwtSecret.sign({ email: user.email }),
         tokenType: 'Bearer',
         expiresIn: '1h',
       };
-    } else
-      throw new BadRequestException('Wrong password, please check again !');
+    else throw new BadRequestException('Wrong password, please check again !');
   }
 }
