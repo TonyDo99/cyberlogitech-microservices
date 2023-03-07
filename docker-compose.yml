@@ -40,6 +40,8 @@ services:
     container_name: kafka-ui
     ports:
       - '8080:8080'
+    depends_on:
+      - kafka
     restart: always
     environment:
       - KAFKA_CLUSTERS_0_NAME=local

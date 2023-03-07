@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { catchError } from 'rxjs';

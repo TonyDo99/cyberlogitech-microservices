@@ -1,7 +1,7 @@
 import { CreateWorkSpaceDto } from 'libs/common/dto/workspace/create-workspace.dto';
 
-export const IWorkSpaceRepository = Symbol('IWorkSpaceRepository');
+export const IWorkSpaceUseCase = 'IWorkSpaceUseCase';
 
-export interface IWorkSpaceRepository {
+export interface IWorkSpaceUseCase {
   createWorkSpace(createWorkSpaceDto: CreateWorkSpaceDto): Promise<string>;
 }

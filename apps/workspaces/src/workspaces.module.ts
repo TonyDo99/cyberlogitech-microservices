@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MailEntity } from 'libs/common/entities/mail.entity';
 import { UserEntity } from 'libs/common/entities/user.entity';
 import { WorkspaceEntity } from 'libs/common/entities/workspace.entity';
 import { DB_VALIDATION } from 'libs/common/joi/database.joi';
 import { join } from 'path';
-import { WorkspacesController } from './workspaces.controller';
-import { WorkspacesService } from './workspaces.service';
+import { WorkSpaceUseCaseModule } from './usecase';
+import { WorkSpacesController } from './workspaces.controller';
+import { WorkSpacesService } from './workspaces.service';
 
 @Module({
   imports: [
@@ -23,14 +25,15 @@ import { WorkspacesService } from './workspaces.service';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [UserEntity, WorkspaceEntity],
+        entities: [UserEntity, WorkspaceEntity, MailEntity],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([WorkspaceEntity]),
+    WorkSpaceUseCaseModule,
   ],
-  controllers: [WorkspacesController],
-  providers: [WorkspacesService],
+  controllers: [WorkSpacesController],
+  providers: [WorkSpacesService],
 })
 export class WorkspacesModule {}

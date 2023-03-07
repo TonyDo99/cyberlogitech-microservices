@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compareSync } from 'bcrypt';
 import { UserEntity } from 'libs/common/entities/user.entity';
-import { InsertResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { AuthenticationDto } from '../dto/create-user.dto';
 
 export const IUserRepository = Symbol('IUserRepository');

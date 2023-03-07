@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MailEntity } from 'libs/common/entities/mail.entity';
 import { UserEntity } from 'libs/common/entities/user.entity';
 import { WorkspaceEntity } from 'libs/common/entities/workspace.entity';
 import { DB_VALIDATION } from 'libs/common/joi/database.joi';
@@ -24,7 +25,7 @@ import { UserService } from './user.service';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [UserEntity, WorkspaceEntity],
+        entities: [UserEntity, WorkspaceEntity, MailEntity],
         synchronize: true,
       }),
       inject: [ConfigService],

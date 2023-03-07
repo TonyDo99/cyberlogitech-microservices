@@ -1,15 +1,24 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  OneToMany,
+  UpdateDateColumn,
+  PrimaryColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
+import * as crypto from 'crypto';
+import { MailEntity } from './mail.entity';
 
 @Entity({ name: 'tb_workspace' })
 export class WorkspaceEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('varchar', {
+    default: `workspace_${crypto.randomUUID({
+      disableEntropyCache: false,
+    })}`,
+  })
   public readonly _id: string;
 
   @Column({ type: 'varchar', nullable: false, comment: 'name of workspace' })
@@ -29,15 +38,6 @@ export class WorkspaceEntity {
   })
   public readonly members: number;
 
-  // TODO Might be set this column become relation n - n with tb_mail_invite
-  @Column({
-    type: 'jsonb',
-    array: false,
-    default: [],
-    comment: 'email members invited to workspace',
-  })
-  public readonly invites: string[];
-
   @Column({
     type: 'varchar',
     name: 'color for default avatar workspace',
@@ -45,7 +45,20 @@ export class WorkspaceEntity {
   })
   public readonly color: string;
 
-  @ManyToOne(() => UserEntity, (ref) => ref.workplaces)
+  @CreateDateColumn()
+  public readonly createdDate: Date | string;
+
+  @UpdateDateColumn()
+  public readonly updatedDate: Date | string;
+
+  @OneToMany(() => MailEntity, (ref) => ref.workspace_id, {
+    cascade: true,
+  })
+  public readonly invitedMail: MailEntity[];
+
+  @ManyToOne(() => UserEntity, (ref) => ref.workplaces, {
+    cascade: true,
+  })
   @JoinColumn({
     referencedColumnName: '_id',
   })
