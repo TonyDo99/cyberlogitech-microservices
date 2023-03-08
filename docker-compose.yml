@@ -30,6 +30,12 @@ services:
     #   - kafka-persistence:/bitnami/kafka
     depends_on:
       - zookeeper
+    healthcheck:
+      test: 'exit 0'
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     networks:
       - app-tier
     ports:
@@ -41,7 +47,8 @@ services:
     ports:
       - '8080:8080'
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     restart: always
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
@@ -72,12 +79,8 @@ services:
       target: development
     command: yarn start:dev api-gateway
     depends_on:
-      postgresql-master:
-        condition: service_completed_successfully
       kafka:
-        condition: service_completed_successfully
-      zookeeper:
-        condition: service_completed_successfully
+        condition: service_healthy
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -95,14 +98,8 @@ services:
     container_name: user-service
     command: yarn start:dev user
     depends_on:
-      postgresql-master:
-        condition: service_completed_successfully
       kafka:
-        condition: service_completed_successfully
-      api-gateway:
-        condition: service_completed_successfully
-      zookeeper:
-        condition: service_completed_successfully
+        condition: service_healthy
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -118,14 +115,8 @@ services:
     container_name: workspaces-service
     command: yarn start:dev workspaces
     depends_on:
-      postgresql-master:
-        condition: service_completed_successfully
       kafka:
-        condition: service_completed_successfully
-      api-gateway:
-        condition: service_completed_successfully
-      zookeeper:
-        condition: service_completed_successfully
+        condition: service_healthy
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -141,14 +132,8 @@ services:
     container_name: space-service
     command: yarn start:dev spaces
     depends_on:
-      postgresql-master:
-        condition: service_completed_successfully
       kafka:
-        condition: service_completed_successfully
-      api-gateway:
-        condition: service_completed_successfully
-      zookeeper:
-        condition: service_completed_successfully
+        condition: service_healthy
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
