@@ -2,7 +2,7 @@
 /dist
 /node_modules
 .env
-./apps/**/.env
+./apps/api-gateway/.env
 
 # Logs
 logs
