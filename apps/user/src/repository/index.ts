@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtStrategy } from 'apps/api-gateway/src/auth/strategies/jwt.strategy';
 import { UserEntity } from 'libs/common/entities/user.entity';
 import { WorkspaceEntity } from 'libs/common/entities/workspace.entity';
 import { IUserRepository, UserRepository } from './user.repository';
@@ -16,7 +17,7 @@ import { IUserRepository, UserRepository } from './user.repository';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('SECRET_KEY'),
         signOptions: {
-          expiresIn: 3600,
+          expiresIn: 60,
         },
       }),
       inject: [ConfigService],
@@ -27,6 +28,7 @@ import { IUserRepository, UserRepository } from './user.repository';
       provide: IUserRepository,
       useClass: UserRepository,
     },
+    JwtStrategy
   ],
   exports: [IUserRepository],
 })

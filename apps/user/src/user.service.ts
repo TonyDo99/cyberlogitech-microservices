@@ -1,4 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { RefressTokenDto } from 'apps/api-gateway/src/dto/refresstoken-data.dto';
 import { hashingFunc } from 'libs/common/utils/hashing';
 import { AuthenticationDto } from './dto/create-user.dto';
 import { IAuthenticationUseCase } from './usecase/create-user.interface';
@@ -9,7 +10,7 @@ export class UserService {
   constructor(
     @Inject(IAuthenticationUseCase)
     private readonly userUseCase: IAuthenticationUseCase,
-  ) {}
+  ) { }
   async createUser(authenticationDto: AuthenticationDto): Promise<string> {
     this.logger.log('Register service is running !');
     const hash = await hashingFunc(authenticationDto.password, 10);
@@ -28,4 +29,13 @@ export class UserService {
 
     return await this.userUseCase.login(authenticationDto);
   }
+
+  async getrefresstoken(refresstoken: RefressTokenDto): Promise<{
+    accessToken: string;
+    tokenType: string;
+    expiresIn: string;
+  }>{
+    return await this.userUseCase.getrefresstoken(refresstoken);
+  }
+
 }

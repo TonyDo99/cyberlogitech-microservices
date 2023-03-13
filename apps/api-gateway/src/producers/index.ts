@@ -2,12 +2,13 @@ import { ClientsModuleOptions, Transport } from '@nestjs/microservices';
 
 export const PRODUCER_LIST: ClientsModuleOptions = [
   {
+    // kafka-service
     name: 'USER',
     transport: Transport.KAFKA,
     options: {
       client: {
         clientId: 'user',
-        brokers: ['kafka-service:9092'],
+        brokers: ['localhost:9092'],
       },
       consumer: {
         groupId: 'user-consumer',
@@ -20,7 +21,7 @@ export const PRODUCER_LIST: ClientsModuleOptions = [
     options: {
       client: {
         clientId: 'workspace',
-        brokers: ['kafka-service:9092'],
+        brokers: ['localhost:9092'],
       },
       consumer: {
         groupId: 'workspace-consumer',
@@ -33,7 +34,7 @@ export const PRODUCER_LIST: ClientsModuleOptions = [
     options: {
       client: {
         clientId: 'space',
-        brokers: ['kafka-service:9092'],
+        brokers: ['localhost:9092'],
       },
       consumer: {
         groupId: 'space-consumer',

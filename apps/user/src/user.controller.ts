@@ -1,5 +1,6 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Request, UseGuards } from '@nestjs/common';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { RefressTokenDto } from 'apps/api-gateway/src/dto/refresstoken-data.dto';
 import { AuthenticationDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 
@@ -20,6 +21,19 @@ export class UserController {
   async login(@Payload() authenticationDto: AuthenticationDto) {
     try {
       return await this.userService.login(authenticationDto);
+    } catch (error) {
+      throw new RpcException(error);
+    }
+  }
+
+  @MessagePattern('user-refresstoken')
+  async getrefresstoken(@Payload() refresstoken : RefressTokenDto):Promise<{
+    accessToken: string;
+    tokenType: string;
+    expiresIn: string;
+  }> {
+    try {
+      return await this.userService.getrefresstoken(refresstoken);
     } catch (error) {
       throw new RpcException(error);
     }

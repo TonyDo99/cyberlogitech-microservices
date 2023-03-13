@@ -58,13 +58,16 @@ services:
 
   postgresql-master:
     image: docker.io/bitnami/postgresql:14
-    container_name: db-clickup-container
+    container_name: crmtool
     # volumes:
     #   - postgresql-persistence:/bitnami/postgresql
     environment:
-      - POSTGRESQL_USERNAME=administation
-      - POSTGRESQL_PASSWORD=cyberlogistics
-      - POSTGRESQL_DATABASE=db_clickup
+      # - POSTGRESQL_USERNAME=postgres
+      # - POSTGRESQL_PASSWORD=quangtrung19978
+      # - POSTGRESQL_DATABASE=crmtool
+      POSTGRES_PASSWORD: quangtrung19978
+      POSTGRES_USER: postgres
+      POSTGRES_DB: crmtool
     ports:
       - '5432:5432'
     restart: always
