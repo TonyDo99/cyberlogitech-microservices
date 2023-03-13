@@ -8,7 +8,7 @@ export const PRODUCER_LIST: ClientsModuleOptions = [
     options: {
       client: {
         clientId: 'user',
-        brokers: ['localhost:9092'],
+        brokers: ['kafka-service:9092'],
       },
       consumer: {
         groupId: 'user-consumer',
@@ -21,7 +21,7 @@ export const PRODUCER_LIST: ClientsModuleOptions = [
     options: {
       client: {
         clientId: 'workspace',
-        brokers: ['localhost:9092'],
+        brokers: ['kafka-service:9092'],
       },
       consumer: {
         groupId: 'workspace-consumer',
@@ -34,7 +34,7 @@ export const PRODUCER_LIST: ClientsModuleOptions = [
     options: {
       client: {
         clientId: 'space',
-        brokers: ['localhost:9092'],
+        brokers: ['kafka-service:9092'],
       },
       consumer: {
         groupId: 'space-consumer',

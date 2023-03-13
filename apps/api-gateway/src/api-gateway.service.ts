@@ -30,11 +30,11 @@ export class ApiGatewayService implements OnModuleInit {
     return this.userClient.send('user-login', authenticationDto);
   }
 
-  info(req:any): Observable<any> {
-    return req.user
+  info(req: any): Observable<any> {
+    return req.user;
   }
 
-  refresstoken(refresstoken:RefressTokenDto): Observable<any>{
+  refresstoken(refresstoken: RefressTokenDto): Observable<any> {
     return this.userClient.send('user-refresstoken', refresstoken);
   }
 }

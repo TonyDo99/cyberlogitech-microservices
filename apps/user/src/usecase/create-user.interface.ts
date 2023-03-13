@@ -12,7 +12,7 @@ export interface IAuthenticationUseCase {
     expiresIn: string;
   }>;
 
-  getrefresstoken(refresstoken:RefressTokenDto): Promise<{
+  getrefresstoken(refresstoken: RefressTokenDto): Promise<{
     accessToken: string;
     tokenType: string;
     expiresIn: string;

@@ -34,7 +34,7 @@ export class ApiGatewayController {
   @UseGuards(JwtAuthGuard)
   @Get('info')
   infouser(@Request() req) {
-    return this.apiGatewayService.info(req)
+    return this.apiGatewayService.info(req);
   }
 
   @Get('login')
@@ -54,5 +54,4 @@ export class ApiGatewayController {
       }),
     );
   }
-
 }

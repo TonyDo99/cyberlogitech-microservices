@@ -17,7 +17,7 @@ import { IUserRepository, UserRepository } from './user.repository';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('SECRET_KEY'),
         signOptions: {
-          expiresIn: 60,
+          expiresIn: 3600,
         },
       }),
       inject: [ConfigService],
@@ -28,7 +28,7 @@ import { IUserRepository, UserRepository } from './user.repository';
       provide: IUserRepository,
       useClass: UserRepository,
     },
-    JwtStrategy
+    JwtStrategy,
   ],
   exports: [IUserRepository],
 })

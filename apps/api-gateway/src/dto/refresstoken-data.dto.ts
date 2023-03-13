@@ -1,8 +1,3 @@
-
-
 export class RefressTokenDto {
-    public readonly refresstoken: string;
-  }
-  
-  
-  
+  public readonly refresstoken: string;
+}

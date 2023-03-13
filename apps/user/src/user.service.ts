@@ -10,7 +10,7 @@ export class UserService {
   constructor(
     @Inject(IAuthenticationUseCase)
     private readonly userUseCase: IAuthenticationUseCase,
-  ) { }
+  ) {}
   async createUser(authenticationDto: AuthenticationDto): Promise<string> {
     this.logger.log('Register service is running !');
     const hash = await hashingFunc(authenticationDto.password, 10);
@@ -34,8 +34,7 @@ export class UserService {
     accessToken: string;
     tokenType: string;
     expiresIn: string;
-  }>{
+  }> {
     return await this.userUseCase.getrefresstoken(refresstoken);
   }
-
 }

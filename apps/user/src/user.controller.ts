@@ -27,7 +27,7 @@ export class UserController {
   }
 
   @MessagePattern('user-refresstoken')
-  async getrefresstoken(@Payload() refresstoken : RefressTokenDto):Promise<{
+  async getrefresstoken(@Payload() refresstoken: RefressTokenDto): Promise<{
     accessToken: string;
     tokenType: string;
     expiresIn: string;
