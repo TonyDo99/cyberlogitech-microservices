@@ -3,6 +3,9 @@
 /node_modules
 .env
 ./apps/api-gateway/.env
+./apps/user/.env
+./apps/workspaces/.env
+./apps/space/.env
 
 # Logs
 logs
@@ -12,6 +15,7 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+yarn.log
 
 # OS
 .DS_Store
