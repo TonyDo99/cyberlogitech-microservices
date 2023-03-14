@@ -30,6 +30,14 @@ export class UserEntity {
   })
   public readonly password: string;
 
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    unique: true,
+    comment: 'refreshtoken',
+  })
+  public readonly refreshToken: string;
+
   @CreateDateColumn()
   public readonly createdDate: Date | string;
 

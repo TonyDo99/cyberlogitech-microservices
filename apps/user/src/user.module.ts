@@ -9,11 +9,10 @@ import { join } from 'path';
 import { UserUseCaseModule } from './usecase';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: join(process.cwd(), '/apps/api-gateway/.env'),
+      envFilePath: join(process.cwd(), '/apps/user/.env'),
       validationSchema: DB_VALIDATION,
     }),
     TypeOrmModule.forRootAsync({

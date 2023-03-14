@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { CreateWorkSpaceDto } from 'libs/common/dto/workspace/create-workspace.dto';
 import { catchError } from 'rxjs';
@@ -10,6 +10,7 @@ export class WorkSpaceGatewayController {
     private readonly workspaceClientService: WorkSpaceClientService,
   ) {}
 
+  // @UseGuards(JwtAuthGuard)
   @Post()
   createWorkspace(@Body() createWorkSpaceDto: CreateWorkSpaceDto) {
     return this.workspaceClientService.createWorkspace(createWorkSpaceDto).pipe(

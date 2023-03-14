@@ -1,0 +1,319 @@
+{
+	"info": {
+		"_postman_id": "ff09c830-7122-4d39-a42f-402db1503463",
+		"name": "CRM_TOOL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7842309"
+	},
+	"item": [
+		{
+			"name": "USER",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"dotanphat26@gmail.com\",\n    \"password\": \"Bluesad@@#_Berry_1999SSDAD*3!!32\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/user",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"dotanphat12345@gmail.com\",\n    \"password\": \"Bluesad@@#_Berry_1999SSDAD*3!!32\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "480"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1e0-4QG6H0+lMyLGy4H/poPmN3sz3Ow\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Mar 2023 03:28:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"payload\": {\n        \"identifiers\": [\n            {\n                \"_id\": \"6bee6436-ca8d-4556-8a38-4851ea9b9ce8\"\n            }\n        ],\n        \"generatedMaps\": [\n            {\n                \"_id\": \"6bee6436-ca8d-4556-8a38-4851ea9b9ce8\",\n                \"createdDate\": \"2023-03-06T03:28:35.302Z\",\n                \"updatedDate\": \"2023-03-06T03:28:35.302Z\"\n            }\n        ],\n        \"raw\": [\n            {\n                \"_id\": \"6bee6436-ca8d-4556-8a38-4851ea9b9ce8\",\n                \"createdDate\": \"2023-03-06T03:28:35.302Z\",\n                \"updatedDate\": \"2023-03-06T03:28:35.302Z\"\n            }\n        ]\n    },\n    \"description\": \"Response successfully from backend. This's a interceptor format please don't mind it\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"dotanphat26@gmail.com\",\n    \"password\": \"Bluesad@@#_Berry_1999SSDAD*3!!32\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/user",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"dotanphat123@gmail.com\",\n    \"password\": \"Bluesad@@#_Berry_1999SSDAD*3!!32\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/api/user",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "360"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"168-JCZn6+IqjiAZY1H8dIRVIXMAIb8\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Mar 2023 03:48:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"payload\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRvdGFucGhhdDEyM0BnbWFpbC5jb20iLCJpYXQiOjE2NzgwNzQ0ODYsImV4cCI6MTY3ODA3ODA4Nn0.wlFJMlBPZqaD52BxdPrqIXbdtO_kaVtsVzHq2YPbDzg\",\n        \"tokenType\": \"Bearer\",\n        \"expiresIn\": \"1h\"\n    },\n    \"description\": \"Response successfully from backend. This's a interceptor format please don't mind it\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "WORKSPACE",
+			"item": [
+				{
+					"name": "Create workspace",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"hostWorkspace\": \"cc71a617-dd06-4e84-8b17-f4691edb7262\",\n    \"workspaceName\": \"Phat do workspace\",\n    \"avatar\": \"avatar.png\",\n    \"members\": 3,\n    \"invited\": [\n        \"dotanphat20@gmail.com\", \"dotanphat02@gmail.com\",  \"dotanphat20@gmail.com\", \"dotanphat02@gmail.com\",  \"dotanphat20@gmail.com\", \"dotanphat02@gmail.com\"\n    ]\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/workspace",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"workspace"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"hostWorkspace\": \"cc71a617-dd06-4e84-8b17-f4691edb7262\",\n    \"workspaceName\": \"Phat do workspace\",\n    \"avatar\": \"avatar.png\",\n    \"members\": 3,\n    \"invited\": [\n        \"dotanphat20@gmail.com\", \"dotanphat02@gmail.com\",  \"dotanphat20@gmail.com\", \"dotanphat02@gmail.com\",  \"dotanphat20@gmail.com\", \"dotanphat02@gmail.com\"\n    ]\n    \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local}}/api/workspace",
+									"host": [
+										"{{local}}"
+									],
+									"path": [
+										"api",
+										"workspace"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1516"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5ec-rq1dnRlnW5gY4TH4c+tfZwfaghc\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Mar 2023 08:54:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"payload\": {\n        \"workspaceName\": \"Phat do workspace\",\n        \"avatar\": \"avatar.png\",\n        \"members\": 3,\n        \"invitedMail\": [\n            {\n                \"invited\": \"dotanphat20@gmail.com\",\n                \"_id\": \"3ed65078-d176-4ffd-8d06-cc47e9821e6d\",\n                \"status\": \"pending\",\n                \"createdDate\": \"2023-03-07T08:54:23.398Z\",\n                \"updatedDate\": \"2023-03-07T08:54:23.398Z\"\n            },\n            {\n                \"invited\": \"dotanphat02@gmail.com\",\n                \"_id\": \"36878042-681b-4d33-a7c5-e194814252ba\",\n                \"status\": \"pending\",\n                \"createdDate\": \"2023-03-07T08:54:23.398Z\",\n                \"updatedDate\": \"2023-03-07T08:54:23.398Z\"\n            },\n            {\n                \"invited\": \"dotanphat20@gmail.com\",\n                \"_id\": \"765ecca8-ca9b-484c-8389-61ae9184c4e7\",\n                \"status\": \"pending\",\n                \"createdDate\": \"2023-03-07T08:54:23.398Z\",\n                \"updatedDate\": \"2023-03-07T08:54:23.398Z\"\n            },\n            {\n                \"invited\": \"dotanphat02@gmail.com\",\n                \"_id\": \"59820ce3-8a70-4e70-9158-7f7ed196cf51\",\n                \"status\": \"pending\",\n                \"createdDate\": \"2023-03-07T08:54:23.398Z\",\n                \"updatedDate\": \"2023-03-07T08:54:23.398Z\"\n            },\n            {\n                \"invited\": \"dotanphat20@gmail.com\",\n                \"_id\": \"8c130c7e-50d8-443d-9e0b-1be7c89517c4\",\n                \"status\": \"pending\",\n                \"createdDate\": \"2023-03-07T08:54:23.398Z\",\n                \"updatedDate\": \"2023-03-07T08:54:23.398Z\"\n            },\n            {\n                \"invited\": \"dotanphat02@gmail.com\",\n                \"_id\": \"2d9b6e03-90b6-4f7e-a808-c5b7d1b0a41e\",\n                \"status\": \"pending\",\n                \"createdDate\": \"2023-03-07T08:54:23.398Z\",\n                \"updatedDate\": \"2023-03-07T08:54:23.398Z\"\n            }\n        ],\n        \"hostWorkspace\": \"cc71a617-dd06-4e84-8b17-f4691edb7262\",\n        \"color\": null,\n        \"_id\": \"workspace_d3207286-f4c0-40e6-bcee-2e8b9afb6c0c\",\n        \"createdDate\": \"2023-03-07T08:54:23.398Z\",\n        \"updatedDate\": \"2023-03-07T08:54:23.398Z\"\n    },\n    \"description\": \"Response successfully from backend. This's a interceptor format please don't mind it\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local",
+			"value": "localhost:3000",
+			"type": "string"
+		}
+	]
+}

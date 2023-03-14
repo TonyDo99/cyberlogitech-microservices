@@ -3,6 +3,7 @@ import { ClientKafka } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { InsertResult } from 'typeorm';
 import { AuthenticationDto } from './dto/create-user.dto';
+import { RefreshTokenDto } from './dto/refreshtoken-data.dto';
 
 @Injectable()
 export class ApiGatewayService implements OnModuleInit {
@@ -11,7 +12,8 @@ export class ApiGatewayService implements OnModuleInit {
   async onModuleInit() {
     this.userClient.subscribeToResponseOf('user-create');
     this.userClient.subscribeToResponseOf('user-login');
-
+    this.userClient.subscribeToResponseOf('user-refreshtoken');
+    this.userClient.subscribeToResponseOf('user-info');
     await this.userClient.connect();
   }
 
@@ -27,5 +29,13 @@ export class ApiGatewayService implements OnModuleInit {
     expiresIn: string;
   }> {
     return this.userClient.send('user-login', authenticationDto);
+  }
+
+  userinfo(useremail: string): Observable<any> {
+    return this.userClient.send('user-info', useremail);
+  }
+
+  refreshToken(refreshToken: RefreshTokenDto): Observable<any> {
+    return this.userClient.send('user-refreshtoken', refreshToken);
   }
 }

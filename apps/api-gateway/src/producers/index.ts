@@ -2,6 +2,7 @@ import { ClientsModuleOptions, Transport } from '@nestjs/microservices';
 
 export const PRODUCER_LIST: ClientsModuleOptions = [
   {
+    // kafka-service
     name: 'USER',
     transport: Transport.KAFKA,
     options: {

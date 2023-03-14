@@ -30,6 +30,12 @@ services:
     #   - kafka-persistence:/bitnami/kafka
     depends_on:
       - zookeeper
+    healthcheck:
+      test: 'exit 0'
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     networks:
       - app-tier
     ports:
@@ -41,7 +47,8 @@ services:
     ports:
       - '8080:8080'
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     restart: always
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
@@ -51,13 +58,13 @@ services:
 
   postgresql-master:
     image: docker.io/bitnami/postgresql:14
-    container_name: db-clickup-container
+    container_name: crmtool
     # volumes:
     #   - postgresql-persistence:/bitnami/postgresql
     environment:
-      - POSTGRESQL_USERNAME=administation
-      - POSTGRESQL_PASSWORD=cyberlogistics
-      - POSTGRESQL_DATABASE=db_clickup
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - '5432:5432'
     restart: always
