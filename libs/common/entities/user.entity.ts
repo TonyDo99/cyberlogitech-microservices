@@ -34,7 +34,7 @@ export class UserEntity {
     type: 'varchar',
     nullable: true,
     unique: true,
-    comment: 'refress token',
+    comment: 'refreshtoken',
   })
   public readonly refreshToken: string;
 

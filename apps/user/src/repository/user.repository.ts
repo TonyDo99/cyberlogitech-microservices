@@ -98,7 +98,7 @@ export class UserRepository implements IUserRepository {
     });
     const user = await this.findUserByEmail(payload.username);
     if (user.refreshToken !== refreshToken.refreshToken) {
-      throw new NotFoundException('Refress token is not match!');
+      throw new NotFoundException('refreshtoken is not match!');
     }
     const { accessToken } = this.generateTokens(user);
     const data = {
