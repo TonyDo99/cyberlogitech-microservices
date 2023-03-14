@@ -1,6 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import * as sendGrid from '@sendgrid/mail';
+import { ConfigService } from '@nestjs/config';
+import { readFileSync } from 'fs';
 import { CreateWorkSpaceDto } from 'libs/common/dto/workspace/create-workspace.dto';
+import {
+  IMailParams,
+  sendingMail,
+  subjectMail,
+} from 'libs/common/mail/sendingMail';
+import { join } from 'path';
 import { IWorkSpaceUseCase } from './usecase/workspace.interface';
 
 @Injectable()
@@ -8,28 +15,29 @@ export class WorkSpacesService {
   constructor(
     @Inject(IWorkSpaceUseCase)
     private readonly workSpaceUseCase: IWorkSpaceUseCase,
+
+    private readonly configService: ConfigService,
   ) {}
 
   async createWorkSpace(createWorkSpaceDto: CreateWorkSpaceDto) {
-    this.sendingMail(createWorkSpaceDto.invited);
-    return await this.workSpaceUseCase.createWorkSpace(createWorkSpaceDto);
-  }
+    const subject = await subjectMail(
+      `Join the ${createWorkSpaceDto.hostWorkspace} Workspace ClickUp team?`,
+    );
 
-  sendingMail(invites: string[]) {
-    const msg: sendGrid.MailDataRequired = {
-      to: invites, // Change to your recipient
-      from: 'dotanphat20@gmail.com', // Change to your verified sender
-      subject: 'Sending with SendGrid is Fun',
-      text: 'and easy to do anywhere, even with Node.js',
-      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    const mailParams: IMailParams = {
+      user: this.configService.get('MAIL_USER'),
+      pass: this.configService.get('MAIL_PASSWORD'),
+      subject,
+      receivers: createWorkSpaceDto.invited,
+      template: readFileSync(
+        join(process.cwd(), 'libs/common', 'mail', 'template/invite.html'),
+        {
+          encoding: 'utf8',
+        },
+      ),
     };
-    sendGrid
-      .send(msg)
-      .then(() => {
-        console.log('Email sent');
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+
+    await sendingMail(mailParams);
+    return await this.workSpaceUseCase.createWorkSpace(createWorkSpaceDto);
   }
 }

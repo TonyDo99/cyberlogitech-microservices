@@ -6,15 +6,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
-    let message = 'NotFoundException';
+    let message: any;
 
     if (exception instanceof RpcException) {
       const errorCatch = exception.getError();
       message = errorCatch['detail'] || errorCatch; // One was for SQL catching exceptions format, second is from RPC
-    } else if (exception instanceof Error) {
-      console.log(exception);
-      message = exception.message;
-    }
+    } else message = exception.response;
 
     response.json({
       path: request.url,

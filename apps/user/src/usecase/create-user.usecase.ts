@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RefreshTokenDto } from 'apps/api-gateway/src/dto/refreshtoken-data.dto';
 import { AuthenticationDto } from '../dto/create-user.dto';
 import { IUserRepository, UserRepository } from '../repository/user.repository';
 import { IAuthenticationUseCase } from './create-user.interface';
@@ -20,7 +19,7 @@ export class UserUseCase implements IAuthenticationUseCase {
   public async createUser(createUserDto: AuthenticationDto): Promise<string> {
     return await this.userRepository.register(createUserDto);
   }
-  public async getrefreshtoken(refreshToken: RefreshTokenDto): Promise<{
+  public async getRefreshToken(refreshToken: string): Promise<{
     accessToken: string;
     tokenType: string;
     expiresIn: string;

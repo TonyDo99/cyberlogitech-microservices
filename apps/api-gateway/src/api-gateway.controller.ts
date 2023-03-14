@@ -12,7 +12,7 @@ import { catchError } from 'rxjs';
 import { ApiGatewayService } from './api-gateway.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AuthenticationDto } from './dto/create-user.dto';
-import { RefreshTokenDto } from './dto/refreshtoken-data.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('user')
 export class ApiGatewayController {
@@ -33,7 +33,7 @@ export class ApiGatewayController {
 
   @UseGuards(JwtAuthGuard)
   @Get('info')
-  infouser(@Request() req) {
+  profile(@Request() req) {
     return this.apiGatewayService.userinfo(req.user);
   }
 

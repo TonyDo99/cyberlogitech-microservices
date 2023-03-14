@@ -3,7 +3,7 @@ import { ClientKafka } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { InsertResult } from 'typeorm';
 import { AuthenticationDto } from './dto/create-user.dto';
-import { RefreshTokenDto } from './dto/refreshtoken-data.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Injectable()
 export class ApiGatewayService implements OnModuleInit {

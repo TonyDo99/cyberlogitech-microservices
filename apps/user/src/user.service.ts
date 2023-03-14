@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { RefreshTokenDto } from 'apps/api-gateway/src/dto/refreshtoken-data.dto';
 import { hashingFunc } from 'libs/common/utils/hashing';
 import { AuthenticationDto } from './dto/create-user.dto';
 import { IAuthenticationUseCase } from './usecase/create-user.interface';
@@ -30,11 +29,11 @@ export class UserService {
     return await this.userUseCase.login(authenticationDto);
   }
 
-  async getrefreshtoken(refreshToken: RefreshTokenDto): Promise<{
+  async getRefreshToken(refreshToken: string): Promise<{
     accessToken: string;
     tokenType: string;
     expiresIn: string;
   }> {
-    return await this.userUseCase.getrefreshtoken(refreshToken);
+    return await this.userUseCase.getRefreshToken(refreshToken);
   }
 }

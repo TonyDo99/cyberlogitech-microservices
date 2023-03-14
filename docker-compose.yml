@@ -1,4 +1,4 @@
-version: '2'
+version: '2.4'
 
 networks:
   app-tier:
@@ -32,10 +32,6 @@ services:
       - zookeeper
     healthcheck:
       test: 'exit 0'
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
     networks:
       - app-tier
     ports:
@@ -58,13 +54,13 @@ services:
 
   postgresql-master:
     image: docker.io/bitnami/postgresql:14
-    container_name: crmtool
+    container_name: db-clickup-container
     # volumes:
     #   - postgresql-persistence:/bitnami/postgresql
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: cyberlogistics
+      POSTGRES_USER: administation
+      POSTGRES_DB: db_clickup
     ports:
       - '5432:5432'
     restart: always
@@ -79,12 +75,8 @@ services:
       target: development
     command: yarn start:dev api-gateway
     depends_on:
-      postgresql-master:
-        condition: service_completed_successfully
       kafka:
-        condition: service_completed_successfully
-      zookeeper:
-        condition: service_completed_successfully
+        condition: service_healthy
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -102,14 +94,8 @@ services:
     container_name: user-service
     command: yarn start:dev user
     depends_on:
-      postgresql-master:
-        condition: service_completed_successfully
       kafka:
-        condition: service_completed_successfully
-      api-gateway:
-        condition: service_completed_successfully
-      zookeeper:
-        condition: service_completed_successfully
+        condition: service_healthy
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -125,14 +111,8 @@ services:
     container_name: workspaces-service
     command: yarn start:dev workspaces
     depends_on:
-      postgresql-master:
-        condition: service_completed_successfully
       kafka:
-        condition: service_completed_successfully
-      api-gateway:
-        condition: service_completed_successfully
-      zookeeper:
-        condition: service_completed_successfully
+        condition: service_healthy
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -148,14 +128,8 @@ services:
     container_name: space-service
     command: yarn start:dev spaces
     depends_on:
-      postgresql-master:
-        condition: service_completed_successfully
       kafka:
-        condition: service_completed_successfully
-      api-gateway:
-        condition: service_completed_successfully
-      zookeeper:
-        condition: service_completed_successfully
+        condition: service_healthy
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules

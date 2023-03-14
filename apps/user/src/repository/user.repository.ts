@@ -4,8 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RefreshTokenDto } from 'apps/api-gateway/src/dto/refreshtoken-data.dto';
 import { compareSync } from 'bcrypt';
 import { UserEntity } from 'libs/common/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -35,33 +35,44 @@ export class UserRepository implements IUserRepository {
   ) {}
 
   async findUserByEmail(email: string): Promise<UserEntity> {
-    const exists = await this.userRepository.findOne({
-      where: {
-        email,
-      },
-    });
+    try {
+      const exists = await this.userRepository.findOne({
+        where: {
+          email,
+        },
+      });
 
-    if (!exists)
-      throw new NotFoundException('User not found, please check again !');
-    else return exists;
+      if (!exists)
+        throw new RpcException('User not found, please check again !');
+      return exists;
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
   async register(authenticationDto: AuthenticationDto): Promise<string> {
-    return JSON.stringify(await this.userRepository.insert(authenticationDto));
+    try {
+      return JSON.stringify(
+        await this.userRepository.insert(authenticationDto),
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
-  private generateTokens(user: any): {
+  generateTokens(user: UserEntity): Promise<{
     accessToken: string;
     refreshToken: string;
-  } {
-    const accesspayload = { username: user.email };
-    const refresspayload = { username: user.email };
-    const accessToken = this.jwtSecret.sign(accesspayload);
-    const refreshToken = this.jwtSecret.sign(refresspayload, {
-      secret: process.env.SECRET_KEY_REFRESH,
-      expiresIn: '2h',
+  }> {
+    return new Promise((resolve, reject) => {
+      const payload = { email: user.email };
+      const accessToken = this.jwtSecret.sign(payload);
+      const refreshToken = this.jwtSecret.sign(payload, {
+        secret: process.env.SECRET_KEY_REFRESH,
+      });
+      if (accessToken && refreshToken) resolve({ accessToken, refreshToken });
+      else reject('generateTokens get errors');
     });
-    return { accessToken, refreshToken };
   }
 
   async login(loginUserDto: AuthenticationDto): Promise<{
@@ -69,43 +80,48 @@ export class UserRepository implements IUserRepository {
     accessToken: string;
     tokenType: string;
     expiresIn: string;
-    expiresInRefress: string;
   }> {
-    const user = await this.findUserByEmail(loginUserDto.email);
-    if (user && compareSync(loginUserDto.password, user.password)) {
-      const { accessToken, refreshToken } = this.generateTokens(user);
-      await this.userRepository.update(user._id, {
-        refreshToken: refreshToken,
-      });
-      return {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        tokenType: 'Bearer',
-        expiresIn: '1h',
-        expiresInRefress: '2h',
-      };
-    } else
-      throw new BadRequestException('Wrong password, please check again !');
+    try {
+      const user = await this.findUserByEmail(loginUserDto.email);
+      if (user && compareSync(loginUserDto.password, user.password)) {
+        const { accessToken, refreshToken } = await this.generateTokens(user);
+        await this.userRepository.update(user._id, {
+          refreshToken,
+        });
+        return {
+          accessToken,
+          refreshToken,
+          tokenType: 'Bearer',
+          expiresIn: '1h',
+        };
+      } else throw new RpcException('Wrong password, please check again !');
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
-  async refreshToken(refreshToken: RefreshTokenDto): Promise<{
+  async refreshToken(refreshToken: string): Promise<{
     accessToken: string;
+    refreshToken: string;
     tokenType: string;
     expiresIn: string;
   }> {
-    const payload = await this.jwtSecret.verify(refreshToken.refreshToken, {
-      secret: process.env.SECRET_KEY_REFRESH,
-    });
-    const user = await this.findUserByEmail(payload.username);
-    if (user.refreshToken !== refreshToken.refreshToken) {
-      throw new NotFoundException('refreshtoken is not match!');
+    try {
+      const payload = await this.jwtSecret.verify(refreshToken, {
+        secret: process.env.SECRET_KEY_REFRESH,
+      });
+      const user = await this.findUserByEmail(payload.username);
+      if (user.refreshToken !== refreshToken) {
+        throw new RpcException('refresh token is not match!');
+      }
+      const genTokens = await this.generateTokens(user);
+      return {
+        ...genTokens,
+        tokenType: 'Bearer',
+        expiresIn: '1h',
+      };
+    } catch (error) {
+      throw new RpcException(error);
     }
-    const { accessToken } = this.generateTokens(user);
-    const data = {
-      accessToken: accessToken,
-      tokenType: 'Bearer',
-      expiresIn: '1h',
-    };
-    return data;
   }
 }

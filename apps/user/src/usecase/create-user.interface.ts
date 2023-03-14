@@ -1,4 +1,3 @@
-import { RefreshTokenDto } from 'apps/api-gateway/src/dto/refreshtoken-data.dto';
 import { AuthenticationDto } from '../dto/create-user.dto';
 
 export const IAuthenticationUseCase = Symbol.for('IAuthenticationUseCase');
@@ -12,7 +11,7 @@ export interface IAuthenticationUseCase {
     expiresIn: string;
   }>;
 
-  getrefreshtoken(refreshToken: RefreshTokenDto): Promise<{
+  getRefreshToken(refreshToken: string): Promise<{
     accessToken: string;
     tokenType: string;
     expiresIn: string;
