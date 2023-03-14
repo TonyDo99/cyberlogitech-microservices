@@ -1,7 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AllExceptionsFilter } from 'libs/common/http/exception-comon.filter';
-import { RpcExceptionOne } from 'libs/common/http/rpc-exception.filter';
 import { ResponseInterceptor } from 'libs/common/interceptor/response.interceptor';
 import { ApiGatewayModule } from './api-gateway.module';
 
