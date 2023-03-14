@@ -1,29 +1,25 @@
-import { Catch, ExceptionFilter, HttpException, ArgumentsHost } from '@nestjs/common';
+import { Catch, ExceptionFilter, ArgumentsHost } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { Response } from 'express';
-
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
+    const response = ctx.getResponse();
+    const request = ctx.getRequest();
+    let message = 'NotFoundException';
 
-    let status = 500;
-    let message = 'Internal server error';
-    if (exception instanceof HttpException) {
-      status = exception.getStatus();
-      message = exception.message;
-    }else if(exception instanceof RpcException){
-      message = exception.message;
-    } 
-    else if (exception instanceof Error) {
+    if (exception instanceof RpcException) {
+      const errorCatch = exception.getError();
+      message = errorCatch['detail'] || errorCatch; // One was for SQL catching exceptions format, second is from RPC
+    } else if (exception instanceof Error) {
+      console.log(exception);
       message = exception.message;
     }
-    
 
-    response.status(status).json({
-      statusCode: status,
+    response.json({
+      path: request.url,
       message,
+      timestamp: new Date().toISOString(),
     });
   }
 }

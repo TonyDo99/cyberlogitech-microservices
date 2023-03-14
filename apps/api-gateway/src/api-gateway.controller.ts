@@ -12,7 +12,7 @@ import { catchError } from 'rxjs';
 import { ApiGatewayService } from './api-gateway.service';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AuthenticationDto } from './dto/create-user.dto';
-import { RefressTokenDto } from './dto/refresstoken-data.dto';
+import { RefreshTokenDto } from './dto/refreshtoken-data.dto';
 
 @Controller('user')
 export class ApiGatewayController {
@@ -34,7 +34,7 @@ export class ApiGatewayController {
   @UseGuards(JwtAuthGuard)
   @Get('info')
   infouser(@Request() req) {
-    return this.apiGatewayService.info(req);
+    return this.apiGatewayService.userinfo(req.user);
   }
 
   @Get('login')
@@ -46,9 +46,9 @@ export class ApiGatewayController {
     );
   }
 
-  @Post('refresstoken')
-  refresstoken(@Body() refresstoken: RefressTokenDto) {
-    return this.apiGatewayService.refresstoken(refresstoken).pipe(
+  @Post('refreshToken')
+  refreshToken(@Body() refreshToken: RefreshTokenDto) {
+    return this.apiGatewayService.refreshToken(refreshToken).pipe(
       catchError((error) => {
         throw new RpcException(error);
       }),

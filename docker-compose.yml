@@ -62,9 +62,6 @@ services:
     # volumes:
     #   - postgresql-persistence:/bitnami/postgresql
     environment:
-      # - POSTGRESQL_USERNAME=postgres
-      # - POSTGRESQL_PASSWORD=quangtrung19978
-      # - POSTGRESQL_DATABASE=crmtool
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_DB: ${DB_NAME}
@@ -82,8 +79,12 @@ services:
       target: development
     command: yarn start:dev api-gateway
     depends_on:
+      postgresql-master:
+        condition: service_completed_successfully
       kafka:
-        condition: service_healthy
+        condition: service_completed_successfully
+      zookeeper:
+        condition: service_completed_successfully
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -101,8 +102,14 @@ services:
     container_name: user-service
     command: yarn start:dev user
     depends_on:
+      postgresql-master:
+        condition: service_completed_successfully
       kafka:
-        condition: service_healthy
+        condition: service_completed_successfully
+      api-gateway:
+        condition: service_completed_successfully
+      zookeeper:
+        condition: service_completed_successfully
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -118,8 +125,14 @@ services:
     container_name: workspaces-service
     command: yarn start:dev workspaces
     depends_on:
+      postgresql-master:
+        condition: service_completed_successfully
       kafka:
-        condition: service_healthy
+        condition: service_completed_successfully
+      api-gateway:
+        condition: service_completed_successfully
+      zookeeper:
+        condition: service_completed_successfully
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -135,8 +148,14 @@ services:
     container_name: space-service
     command: yarn start:dev spaces
     depends_on:
+      postgresql-master:
+        condition: service_completed_successfully
       kafka:
-        condition: service_healthy
+        condition: service_completed_successfully
+      api-gateway:
+        condition: service_completed_successfully
+      zookeeper:
+        condition: service_completed_successfully
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules

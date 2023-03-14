@@ -3,13 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { HttpStatus } from '@nestjs/common/enums';
-import { HttpException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RefressTokenDto } from 'apps/api-gateway/src/dto/refresstoken-data.dto';
+import { RefreshTokenDto } from 'apps/api-gateway/src/dto/refreshtoken-data.dto';
 import { compareSync } from 'bcrypt';
-import { options } from 'joi';
 import { UserEntity } from 'libs/common/entities/user.entity';
 import { Repository } from 'typeorm';
 import { AuthenticationDto } from '../dto/create-user.dto';
@@ -55,20 +52,20 @@ export class UserRepository implements IUserRepository {
 
   private generateTokens(user: any): {
     accessToken: string;
-    refressToken: string;
+    refreshToken: string;
   } {
-    const accesspayload = { username: user.email, sub: user._id };
-    const refresspayload = { username: user.email, sub: user._id };
+    const accesspayload = { username: user.email };
+    const refresspayload = { username: user.email };
     const accessToken = this.jwtSecret.sign(accesspayload);
-    const refressToken = this.jwtSecret.sign(refresspayload, {
+    const refreshToken = this.jwtSecret.sign(refresspayload, {
       secret: process.env.SECRET_KEY_REFRESH,
       expiresIn: '2h',
     });
-    return { accessToken, refressToken };
+    return { accessToken, refreshToken };
   }
 
   async login(loginUserDto: AuthenticationDto): Promise<{
-    refressToken: string;
+    refreshToken: string;
     accessToken: string;
     tokenType: string;
     expiresIn: string;
@@ -76,13 +73,13 @@ export class UserRepository implements IUserRepository {
   }> {
     const user = await this.findUserByEmail(loginUserDto.email);
     if (user && compareSync(loginUserDto.password, user.password)) {
-      const { accessToken, refressToken } = this.generateTokens(user);
+      const { accessToken, refreshToken } = this.generateTokens(user);
       await this.userRepository.update(user._id, {
-        refressToken: refressToken,
+        refreshToken: refreshToken,
       });
       return {
         accessToken: accessToken,
-        refressToken: refressToken,
+        refreshToken: refreshToken,
         tokenType: 'Bearer',
         expiresIn: '1h',
         expiresInRefress: '2h',
@@ -91,16 +88,16 @@ export class UserRepository implements IUserRepository {
       throw new BadRequestException('Wrong password, please check again !');
   }
 
-  async refresstoken(refresstoken: RefressTokenDto): Promise<{
+  async refreshToken(refreshToken: RefreshTokenDto): Promise<{
     accessToken: string;
     tokenType: string;
     expiresIn: string;
   }> {
-    const payload = await this.jwtSecret.verify(refresstoken.refresstoken, {
+    const payload = await this.jwtSecret.verify(refreshToken.refreshToken, {
       secret: process.env.SECRET_KEY_REFRESH,
     });
     const user = await this.findUserByEmail(payload.username);
-    if (user.refressToken !== refresstoken.refresstoken) {
+    if (user.refreshToken !== refreshToken.refreshToken) {
       throw new NotFoundException('Refress token is not match!');
     }
     const { accessToken } = this.generateTokens(user);

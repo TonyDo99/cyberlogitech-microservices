@@ -36,7 +36,7 @@ export class UserEntity {
     unique: true,
     comment: 'refress token',
   })
-  public readonly refressToken: string;
+  public readonly refreshToken: string;
 
   @CreateDateColumn()
   public readonly createdDate: Date | string;
