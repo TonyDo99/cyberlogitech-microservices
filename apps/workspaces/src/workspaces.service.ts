@@ -9,6 +9,7 @@ import {
 } from 'libs/common/mail/sendingMail';
 import { join } from 'path';
 import { IWorkSpaceUseCase } from './usecase/workspace.interface';
+import * as ejs from 'ejs';
 
 @Injectable()
 export class WorkSpacesService {
@@ -29,15 +30,20 @@ export class WorkSpacesService {
       pass: this.configService.get('MAIL_PASSWORD'),
       subject,
       receivers: createWorkSpaceDto.invited,
-      template: readFileSync(
-        join(process.cwd(), 'libs/common', 'mail', 'template/invite.html'),
+      template: ejs.render(
+        readFileSync(
+          join(process.cwd(), 'libs/common', 'mail', 'template/invite.ejs'),
+          {
+            encoding: 'utf8',
+          },
+        ),
         {
-          encoding: 'utf8',
+          host: createWorkSpaceDto.hostWorkspace,
         },
       ),
     };
 
-    await sendingMail(mailParams);
+    sendingMail(mailParams);
     return await this.workSpaceUseCase.createWorkSpace(createWorkSpaceDto);
   }
 }

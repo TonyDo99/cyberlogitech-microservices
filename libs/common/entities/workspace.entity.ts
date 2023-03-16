@@ -6,19 +6,14 @@ import {
   ManyToOne,
   OneToMany,
   UpdateDateColumn,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
-import * as crypto from 'crypto';
 import { MailEntity } from './mail.entity';
 
 @Entity({ name: 'tb_workspace' })
 export class WorkspaceEntity {
-  @PrimaryColumn('varchar', {
-    default: `workspace_${crypto.randomUUID({
-      disableEntropyCache: false,
-    })}`,
-  })
+  @PrimaryGeneratedColumn('uuid')
   public readonly _id: string;
 
   @Column({ type: 'varchar', nullable: false, comment: 'name of workspace' })
