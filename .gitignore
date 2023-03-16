@@ -1,11 +1,11 @@
 # compiled output
 /dist
 /node_modules
-.env
-./apps/api-gateway/.env
-./apps/user/.env
-./apps/workspaces/.env
-./apps/space/.env
+# .env
+# ./apps/api-gateway/.env
+# ./apps/user/.env
+# ./apps/workspaces/.env
+# ./apps/space/.env
 
 # Logs
 logs
